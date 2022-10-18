@@ -1,0 +1,51 @@
+name: run cypress tests
+on:
+  workflow_dispatch:
+    inputs:
+      baseUrl:
+        description: 'base url'
+        required: true
+        default: 'https://auqa.jobadder.build'
+      email:
+        description: 'user account'
+        required: true
+        default: 'abcd@a.com'
+      password:
+        description: 'user password'
+        required: true
+        default: '12345678'
+      browser:
+        description: 'browser'
+        required: true
+        default: 'electron'
+        type: choice
+        options:
+        - electron
+        - chrome
+        - firefox
+        - edge
+      tag:
+        description: 'run tests based on tags'
+        required: false
+      spec:
+        description: 'run only one spec'
+        required: false
+      matchCase:
+        description: 'enable matchCase option for all cy.contains()'
+        required: false
+        default: false
+        type: boolean
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.inputs.baseUrl }}
+  cancel-in-progress: true
+
+jobs:
+  cypress:
+    name: cypress
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1,2,3,4]
+    steps:
+      

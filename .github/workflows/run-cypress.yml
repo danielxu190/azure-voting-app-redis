@@ -48,4 +48,15 @@ jobs:
       matrix:
         containers: [1,2,3,4]
     steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Init ${{ github.event.inputs.baseUrl }} with matchCase is ${{ github.event.inputs.matchCase }}
+        run: |
+          $projectId, $recordKey = 
+            $env.branch -match 'releasecandidate-stream' -and
+            $env:baseUrl -eq 'https://auqa.jobadder.build' ?
+              'ddfdfdf', $env:defaultRecordKey : 
+              'ddddcc', $env:adhocRecordKey
+          "CYPRESS_PROJECT_ID=$projectId" >> $env:GITHUB_ENV
+          "CYPRESS_RECORD_KEY"
       
